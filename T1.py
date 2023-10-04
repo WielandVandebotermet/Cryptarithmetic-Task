@@ -6,9 +6,9 @@ import streamlit as st
 st.title('Cryptarithmetic Task')
 
 #De Benodigd heden om te weten wat bereken
-Word1 = st.text_input('First word').lower()
-Word2 = st.text_input('Second word').lower()
-Result = st.text_input('The Result').lower()
+Word1 = st.text_input('First word', placeholder= 'A').lower()
+Word2 = st.text_input('Second word', placeholder= 'B').lower()
+Result = st.text_input('The Result', placeholder= 'C').lower()
 
 variables = ()
 #voegt alle unieke letter toe in variables(tuples)
@@ -105,7 +105,7 @@ def CalculateMul():
 def Output(constraints):
     problem = CspProblem(variables, domains, constraints)
     output = backtrack(problem)
-    st.text(output)
+    st.subheader(output)
 
 col1, col2, col3 = st.columns(3)
 with col1:
@@ -117,3 +117,4 @@ with col2:
 with col3:
     if st.button('Calculate Multiplatif'):
         CalculateMul()
+
