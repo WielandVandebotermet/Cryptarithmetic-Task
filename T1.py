@@ -6,13 +6,9 @@ import streamlit as st
 st.title('Cryptarithmetic Task')
 
 #De Benodigd heden om te weten wat bereken
-Word1 = st.text_input('First word', "A")
-Word2 = st.text_input('Second word', "BC")
-Result = st.text_input('The Result', "AAA")
-#om te weten hoe we deze bereken
-options = ("Additive", "Multiplatif", "Subtraction" )
-Type = st.selectbox("Type", options, index=0, label_visibility="visible")
-
+Word1 = st.text_input('First word').lower()
+Word2 = st.text_input('Second word').lower()
+Result = st.text_input('The Result').lower()
 
 variables = ()
 #voegt alle unieke letter toe in variables(tuples)
@@ -82,25 +78,42 @@ def constraint_mulp(variables, values):
     return (int(factor1) * int(factor2)) == int(result)
 
 #Dit zorgt ervoor dat de juiste berekening wordt berekend
-if(Type == "Multiplatif"):
-    constraints = [
-        (variables, constraint_unique),
-        (variables, constraint_mulp),
-    ]
-elif(Type == "Subtraction"):
-    constraints = [
-        (variables, constraint_unique),
-        (variables, constraint_sub),
-    ]
-else:
-    constraints = [
-        (variables, constraint_unique),
-        (variables, constraint_add),
-    ]
 
-output = ""
+
 #dit berekend dan de oplossing
-if st.button('Calculate'):
-    output = backtrack(CspProblem(variables, domains, constraints))
+def CalculateAdd():
+    constraints = [
+    (variables, constraint_unique),
+    (variables, constraint_add),]
+     
+    Output(constraints)
 
-st.text(output)
+def CalculateSub():
+    constraints = [
+    (variables, constraint_unique),
+    (variables, constraint_sub),]
+
+    Output(constraints)
+
+def CalculateMul():
+    constraints = [
+    (variables, constraint_unique),
+    (variables, constraint_mulp),]
+
+    Output(constraints)
+
+def Output(constraints):
+    problem = CspProblem(variables, domains, constraints)
+    output = backtrack(problem)
+    st.text(output)
+
+col1, col2, col3 = st.columns(3)
+with col1:
+    if st.button('Calculate Additive'):
+        CalculateAdd()
+with col2:
+    if st.button('Calculate Subtraction'):
+        CalculateSub()
+with col3:
+    if st.button('Calculate Multiplatif'):
+        CalculateMul()
