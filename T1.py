@@ -1,17 +1,17 @@
 
 #Importeert de benodigheden
-from constraint import *
 from simpleai.search import CspProblem, backtrack
 import streamlit as st
 
 st.title('Cryptarithmetic Task')
 
 #De Benodigd heden om te weten wat bereken
-Word1 = "AB"
-Word2 = "C"
-Result = "AAA"
+Word1 = st.text_input('Type a word')
+Word2 = st.text_input('Type a word')
+Result = st.text_input('Type a word')
 #om te weten hoe we deze bereken
-Type = "1"
+options = ("Additive", "Multiplatif", "Subtraction" )
+Type = st.selectbox("Type", options, index=0, label_visibility="visible")
 
 
 variables = ()
@@ -56,7 +56,7 @@ def constraint_add(variables, values):
     return (int(factor1) + int(factor2)) == int(result)
 
 #De functie koppelt waarden aan letters en check of deze afgetrokken kunnen worden 
-def constraint_det(variables, values):
+def constraint_sub(variables, values):
     factor1 = ""
     factor2 = ""
     result= ""  
@@ -82,15 +82,15 @@ def constraint_mulp(variables, values):
     return (int(factor1) * int(factor2)) == int(result)
 
 #Dit zorgt ervoor dat de juiste berekening wordt berekend
-if(Type == "1"):
+if(Type == "constraint_sub"):
     constraints = [
         (variables, constraint_unique),
         (variables, constraint_mulp),
     ]
-elif(Type == "2"):
+elif(Type == "Subtraction"):
     constraints = [
         (variables, constraint_unique),
-        (variables, constraint_det),
+        (variables, constraint_sub),
     ]
 else:
     constraints = [
@@ -98,6 +98,9 @@ else:
         (variables, constraint_add),
     ]
 
+
 #dit berekend dan de oplossing
-output = backtrack(CspProblem(variables, domains, constraints))
-print('\nSolutions:', output)
+if st.button('Check availability'):
+    output = backtrack(CspProblem(variables, domains, constraints))
+
+st.text(output)
