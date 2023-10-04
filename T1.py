@@ -6,9 +6,9 @@ import streamlit as st
 st.title('Cryptarithmetic Task')
 
 #De Benodigd heden om te weten wat bereken
-Word1 = st.text_input('Type a word')
-Word2 = st.text_input('Type a word')
-Result = st.text_input('Type a word')
+Word1 = st.text_input('First word', "A")
+Word2 = st.text_input('Second word', "BC")
+Result = st.text_input('The Result', "AAA")
 #om te weten hoe we deze bereken
 options = ("Additive", "Multiplatif", "Subtraction" )
 Type = st.selectbox("Type", options, index=0, label_visibility="visible")
@@ -82,7 +82,7 @@ def constraint_mulp(variables, values):
     return (int(factor1) * int(factor2)) == int(result)
 
 #Dit zorgt ervoor dat de juiste berekening wordt berekend
-if(Type == "constraint_sub"):
+if(Type == "Multiplatif"):
     constraints = [
         (variables, constraint_unique),
         (variables, constraint_mulp),
@@ -98,9 +98,9 @@ else:
         (variables, constraint_add),
     ]
 
-
+output = ""
 #dit berekend dan de oplossing
-if st.button('Check availability'):
+if st.button('Calculate'):
     output = backtrack(CspProblem(variables, domains, constraints))
 
 st.text(output)
